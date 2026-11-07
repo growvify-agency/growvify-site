@@ -529,6 +529,14 @@ textarea{line-height:1.5}
   .chip-3{display:none}
   .problems,.services,.work,.plans,.reach{grid-template-columns:1fr}
   .flow .lbl{width:100%}
+  .flow{flex-direction:column;align-items:stretch;gap:0;padding:22px 18px}
+  .flow .lbl{text-align:center;margin-bottom:12px}
+  .flow .n{text-align:center;padding:12px 16px;font-size:1rem}
+  .flow .ar{width:2px;height:26px;margin:6px auto;background:repeating-linear-gradient(180deg,currentColor 0 5px,transparent 5px 9px);background-size:2px 18px;animation:dashv 1s linear infinite}
+  .flow .ar::after{right:auto;left:50%;top:auto;bottom:-4px;transform:translateX(-50%);border:6px solid transparent;border-top:8px solid currentColor;border-bottom:0}
+  .flow.bad .n:last-child{border-width:1.5px}
+  .flows{gap:16px}
+  @keyframes dashv{to{background-position:0 18px}}
   .pcard{grid-template-columns:1fr;gap:14px;padding:26px 22px;top:calc(84px + var(--k) * 10px)}
   .pcard .num{font-size:4.4rem}
   .pcard h3{font-size:1.8rem}
