@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VW6QJQGQDJ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-VW6QJQGQDJ');</script>
+
 <title>Growvify | Content and Meta Ads Agency in Hyderabad</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Growvify is a performance creative agency in Hyderabad. We make the content and run the Meta ads that bring your brand customers.">
@@ -1275,6 +1278,13 @@ const FORM_ENDPOINT   = "";               // paste your Formspree URL, e.g. http
     try{navigator.clipboard.writeText(node.textContent).then(done).catch(sel);}catch(e){sel();}
   });
 
+  // Analytics events (Google Analytics + Meta Pixel when present)
+  window.growTrack=(name,params={})=>{ try{ if(window.gtag) gtag("event",name,params); }catch(e){}
+    try{ if(window.fbq){ if(name==="generate_lead") fbq("track","Lead"); else if(name==="whatsapp_click") fbq("track","Contact",params); else fbq("trackCustom",name,params);} }catch(e){} };
+  ["waBtn","waFloat"].forEach(id=>{const a=document.getElementById(id); if(a) a.addEventListener("click",()=>growTrack("whatsapp_click",{location:id==="waFloat"?"floating_button":"contact_section"}));});
+  document.querySelectorAll('a[href="#contact"]').forEach(a=>a.addEventListener("click",()=>growTrack("cta_click",{label:a.textContent.trim().slice(0,40)})));
+  document.querySelectorAll('a[href*="instagram.com"]').forEach(a=>a.addEventListener("click",()=>growTrack("instagram_click")));
+
   // Enquiry form
   const form=document.getElementById("leadForm"), msg=document.getElementById("formMsg");
   form.addEventListener("submit",async e=>{
@@ -1282,10 +1292,10 @@ const FORM_ENDPOINT   = "";               // paste your Formspree URL, e.g. http
     const missing=[...form.querySelectorAll("[required]")].find(x=>!x.value.trim());
     if(missing){msg.textContent="Please fill in your name, brand name and WhatsApp number."; msg.classList.add("err"); missing.focus(); return;}
     const sb=form.querySelector("button[type=submit]").getBoundingClientRect(); const boom=()=>window.growConfetti&&window.growConfetti(sb.left+sb.width/2,sb.top);
-    if(!FORM_ENDPOINT){msg.textContent="Thanks! For the fastest reply, tap Chat on WhatsApp."; msg.classList.add("ok"); boom(); return;}
+    if(!FORM_ENDPOINT){msg.textContent="Thanks! For the fastest reply, tap Chat on WhatsApp."; msg.classList.add("ok"); boom(); growTrack("generate_lead",{method:"form_no_endpoint"}); return;}
     msg.textContent="Sending…";
     try{const res=await fetch(FORM_ENDPOINT,{method:"POST",body:new FormData(form),headers:{Accept:"application/json"}});
-      if(!res.ok) throw 0; form.reset(); msg.textContent="Thanks! We'll reply within one working day."; msg.classList.add("ok"); boom();
+      if(!res.ok) throw 0; form.reset(); msg.textContent="Thanks! We'll reply within one working day."; msg.classList.add("ok"); boom(); growTrack("generate_lead",{method:"form"});
     }catch(err){msg.textContent="That didn't send. Please message us on WhatsApp instead."; msg.classList.add("err");}
   });
 })();
